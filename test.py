@@ -1,5 +1,9 @@
 import unittest
 from app import app
+import werkzeug
+
+if not hasattr(werkzeug, '__version__'):
+    werkzeug.__version__ = "1.0.0"
 
 class DifferentTests(unittest.TestCase):
     def setUp(self):
@@ -12,7 +16,12 @@ class DifferentTests(unittest.TestCase):
     def test_protected_route_unauthorized(self):
         response = self.client.get('/protected')
         self.assertEqual(response.status_code, 401)
-        self.assertIn("msg", response.json)
+        self.assertIn("msg", response.get_json() or {})
+
+    def test_home(self):
+        response = self.client.get('/')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json, {"message": "API is running"})
 
     def test_swagger_ui_access(self):
         response = self.client.get('/swagger/')
