@@ -23,7 +23,7 @@ jobs:
         run: echo "image-tag=flask-app" >> $GITHUB_OUTPUT
 
   test:
-    name: Run Tests
+    name: Run Test
     runs-on: ubuntu-latest
     needs: build
     steps:
@@ -34,7 +34,7 @@ jobs:
         run: docker build -t flask-app .
 
       - name: Run tests
-        run: docker run --rm flask-app python test_app.py
+        run: docker run --rm flask-app python test.py
 
   deploy:
     name: Deploy to Render
